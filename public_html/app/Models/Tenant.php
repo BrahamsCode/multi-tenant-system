@@ -10,16 +10,4 @@ use Stancl\Tenancy\Database\Concerns\HasDomains;
 class Tenant extends BaseTenant implements TenantWithDatabase
 {
     use HasDatabase, HasDomains;
-
-    protected $fillable = [
-        'id',
-        'name',
-        'server_id',
-        // otros campos que necesites
-    ];
-
-    public function server()
-    {
-        return $this->belongsTo(Server::class);
-    }
 }

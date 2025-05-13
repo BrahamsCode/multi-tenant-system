@@ -1,0 +1,75 @@
+services:
+  app:
+    build: .
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - vendor:/var/www/vendor
+      - ../public_html:/var/www/
+      - ./policy.xml:/etc/ImageMagick-6/policy.xml
+      - ./php.ini:/usr/local/etc/php/php.ini
+      - ./000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./default-ssl.conf:/etc/apache2/sites-enabled/default-ssl.conf
+      - ./my.crt:/etc/ssl/certs/my.crt
+      - ./my.key:/etc/ssl/private/my.key
+    working_dir: /var/www
+    privileged: true
+    restart: always
+
+  db:
+    image: postgres:15
+    ports:
+      - 15432:${POSTGRES_PORT}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: JST-9
+      PGTZ: JST-9
+
+  extdb:
+    image: postgres:15
+    ports:
+      - 5433:${EXT1_POSTGRES_PORT}
+    volumes:
+      - extdbdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${EXT1_POSTGRES_DB}
+      POSTGRES_USER: ${EXT1_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${EXT1_POSTGRES_PASSWORD}
+      TZ: JST-9
+      PGTZ: JST-9
+
+  extdb2:
+    image: postgres:15
+    ports:
+      - 5434:${EXT2_POSTGRES_PORT}
+    volumes:
+      - extdb2data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${EXT2_POSTGRES_DB}
+      POSTGRES_USER: ${EXT2_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${EXT2_POSTGRES_PASSWORD}
+      TZ: JST-9
+      PGTZ: JST-9  
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - redisdata:/data
+
+  mailhog:
+     image: mailhog/mailhog
+     ports:
+         - 8025:8025
+
+volumes:
+  dbdata:
+  extdbdata:
+  extdb2data:
+  vendor:
+  redisdata:
