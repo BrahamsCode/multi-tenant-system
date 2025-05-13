@@ -112,6 +112,52 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        // Añadir configuraciones para los servidores de tenants
+        'tenant_server_1' => [
+            'driver' => 'pgsql',
+            'url' => env('EXT1_DB_URL'),
+            'host' => env('EXT1_DB_HOST', '127.0.0.1'),
+            'port' => env('EXT1_POSTGRES_PORT', '5432'),
+            'database' => env('EXT1_POSTGRES_DB', 'tenants'),
+            'username' => env('EXT1_POSTGRES_USER', 'tenants_user'),
+            'password' => env('EXT1_POSTGRES_PASSWORD', 'tenants_pass'),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+        'tenant_server_2' => [
+            'driver' => 'pgsql',
+            'url' => env('EXT2_DB_URL'),
+            'host' => env('EXT2_DB_HOST', '127.0.0.1'),
+            'port' => env('EXT2_POSTGRES_PORT', '5432'),
+            'database' => env('EXT2_POSTGRES_DB', 'tenants2'),
+            'username' => env('EXT2_POSTGRES_USER', 'tenants2_user'),
+            'password' => env('EXT2_POSTGRES_PASSWORD', 'tenants2_pass'),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+        // Esta es una plantilla que será usada por stancl/tenancy
+        'tenant' => [
+            'driver' => 'pgsql',
+            'host' => '%HOST%',  // Estos marcadores serán reemplazados dinámicamente
+            'port' => '%PORT%',
+            'database' => '%DATABASE%',
+            'username' => '%USERNAME%',
+            'password' => '%PASSWORD%',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
     ],
 
     /*
@@ -147,7 +193,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
             'persistent' => env('REDIS_PERSISTENT', false),
         ],
 

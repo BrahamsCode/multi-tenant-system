@@ -6,24 +6,28 @@ use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
-/*
-|--------------------------------------------------------------------------
-| Tenant Routes
-|--------------------------------------------------------------------------
-|
-| Here you can register the tenant routes for your application.
-| These routes are loaded by the TenantRouteServiceProvider.
-|
-| Feel free to customize them however you want. Good luck!
-|
-*/
-
 Route::middleware([
     'web',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
+    // Ruta principal del tenant
     Route::get('/', function () {
-        return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
+        return view('tenant.dashboard', [
+            'tenant' => tenant(),
+            'users' => \App\Models\User::count()
+        ]);
     });
+
+    // Rutas de autenticación para el tenant
+    Auth::routes();
+
+    // Ejemplo de rutas adicionales específicas del tenant
+    Route::get('/profile', function() {
+        return view('tenant.profile', [
+            'user' => auth()->user()
+        ]);
+    })->middleware('auth')->name('profile');
+
+    // Puedes agregar más rutas específicas del tenant aquí
 });

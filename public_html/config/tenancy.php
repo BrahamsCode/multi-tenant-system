@@ -10,6 +10,7 @@ return [
     'tenant_model' => \App\Models\Tenant::class,
     'id_generator' => Stancl\Tenancy\UUIDGenerator::class,
 
+
     'domain_model' => Domain::class,
 
     /**
@@ -20,7 +21,7 @@ return [
     'central_domains' => [
         '127.0.0.1',
         'localhost',
-        'saas.test', 
+        'saas.test',
     ],
 
     /**
